@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-TrialNumber = 0001
+TrialNumber = 1
 
 AccelerationSet = ["400", "600", "800", "1000", "1200", "1400", "1600", "1800", "2000", "2200"]
 VelocitySet = ["200", "300", "400", "500", "600", "700", "800", "900", "1000", "1100"]
