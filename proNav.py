@@ -16,10 +16,6 @@ def PyJsHoisted_catStrat4_(cx, cy, rx, ry, Lx, Ly, ratThrustX, ratThrustY, catMa
     var.put('angle', Js(0.0))
     var.put('nsep', Js(0.0))
     var.put('N', Js(1.0))
-    pass
-    pass
-    pass
-    pass
     var.put('ratThrust', var.get('Vec2D').callprop('create', Js(0.0), Js(0.0)))
     var.get('ratThrust').callprop('setXY', var.get('ratThrustX'), var.get('ratThrustY'))
     var.put('ratDrag', var.get('Vec2D').callprop('create', Js(0.0), Js(0.0)))
@@ -164,10 +160,5 @@ def PyJs_anonymous_0_(this, arguments, var=var):
     return Js({'create':var.get('create')})
 PyJs_anonymous_0_._set_name('anonymous')
 var.put('Vec2D', PyJs_anonymous_0_())
-pass
-pass
-pass
-
-
 # Add lib to the module scope
 proNav = var.to_python()

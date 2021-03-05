@@ -67,14 +67,13 @@ class Game:
             print(f'--------Generation: {self.current_generation}. Max score so far: {self._max_score_so_far}-------')
         self._max_score = 0
         self.current_generation += 1
-        
+
         # empty all the current sprites if any
         for s in self.all_sprites:
             s.kill()
-            
-        file1 = open("./pp/Trial{}/Scores.txt".format(TRIAL_NUMBER), "a")
-        file1.write("\n Gen {} \n".format(self.current_generation))
-        file1.close()
+
+        with open("./pp/Trial{}/Scores.txt".format(TRIAL_NUMBER), "a") as file1:
+            file1.write("\n Gen {} \n".format(self.current_generation))
         # instantiate rats
         x = random.randint(1, 800)
         y = random.randint(1, 600)
@@ -244,30 +243,20 @@ class Game:
         for rat in self.rats:
             if rat.number == cat.number:
                 nearestRat = rat
-                
+
         try:
             if cat.score == 0:
                 thrustVectors = proNav.catStrat4(cat.rect.x, cat.rect.y, nearestRat.rect.x, nearestRat.rect.y, SCREEN_WIDTH, SCREEN_HEIGHT, nearestRat.strat_force_x, nearestRat.strat_force_y, CAT_ACCELERATION, 10, 0, 1, cat._vel_x, cat._vel_y, nearestRat._vel_x, nearestRat._vel_y)
                 global oldLOSAng
-                oldLOSAng = thrustVectors[2]
                 global oldLOSLen
-                oldLOSLen = thrustVectors[3]
-                
-                cat.strat_force_x = thrustVectors[0]
-                cat.strat_force_y = thrustVectors[1]
-                
             else:
                 thrustVectors = proNav.catStrat4(cat.rect.x, cat.rect.y, nearestRat.rect.x, nearestRat.rect.y, SCREEN_WIDTH, SCREEN_HEIGHT, nearestRat.strat_force_x, nearestRat.strat_force_y, CAT_ACCELERATION, oldLOSAng, oldLOSLen, 2, cat._vel_x, cat._vel_y, nearestRat._vel_x, nearestRat._vel_y)
-                oldLOSAng = thrustVectors[2]
-                oldLOSLen = thrustVectors[3]
-                
-                cat.strat_force_x = thrustVectors[0]
-                cat.strat_force_y = thrustVectors[1]
+            oldLOSAng = thrustVectors[2]
+            oldLOSLen = thrustVectors[3]
 
-        
-            
-            
-            
+            cat.strat_force_x = thrustVectors[0]
+            cat.strat_force_y = thrustVectors[1]
+
         except:
             cat.strat_force_x = 0
             cat.strat_force_y = 0

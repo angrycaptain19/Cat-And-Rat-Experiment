@@ -57,12 +57,10 @@ def extract_computational_subgraph(ind: cgp.Individual) -> nx.MultiDiGraph:
         if node.active:
             f = ind.function_set[node.i_func]
             g.add_node(i, func=f.name)
-            order = 1
-            for j in range(f.arity):
+            for order, j in enumerate(range(f.arity), start=1):
                 i_input = node.i_inputs[j]
                 w = node.weights[j]
                 g.add_edge(i_input, i, weight=w, order=order)
-                order += 1
     return g
 
 
@@ -86,7 +84,7 @@ def simplify(g: nx.MultiDiGraph, input_names: Sequence = None, symbolic_function
 
     # toplogical sort such that i appears before j if there is an edge i->j
     ts = list(nx.topological_sort(g))
-    d = dict()
+    d = {}
     for node_id in ts:
         if node_id < 0:  # inputs in CGP
             d[node_id] = sp.Symbol(

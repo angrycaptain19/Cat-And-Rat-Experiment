@@ -57,17 +57,17 @@ class Rat(MovableSprite):
         if self.score > 500:
             self.kill()
             return
-         
-            
+
+
         posVelArray = js.rk4(self.rect.x, self.rect.y, self.strat_force_x, self.strat_force_y, self.damping, self._vel_x, self._vel_y)
-        
+
         self.rect.x = posVelArray[0]
         self.rect.y = posVelArray[1]
         self._vel_x = posVelArray[2]
         self._vel_y = posVelArray[3]
-        
+
         self.rect = self.image.get_rect(center=self.rect.center)
-        
+
         if self.rect.right > SCREEN_WIDTH:
         	self.rect.x = self.rect.x - SCREEN_WIDTH
         if self.rect.left < 0:
@@ -76,12 +76,15 @@ class Rat(MovableSprite):
         	self.rect.y = self.rect.y - SCREEN_HEIGHT
         if self.rect.bottom < 0:
         	self.rect.y = SCREEN_HEIGHT + self.rect.y
-        
-        if pg.sprite.spritecollideany(self, self._game.cats):
-            if self.number == pg.sprite.spritecollideany(self, self._game.cats).number:
-                self.flag = False
-                self.kill()
-                return
+
+        if (
+            pg.sprite.spritecollideany(self, self._game.cats)
+            and self.number
+            == pg.sprite.spritecollideany(self, self._game.cats).number
+        ):
+            self.flag = False
+            self.kill()
+            return
 
     
     @property
@@ -119,16 +122,16 @@ class Cat(MovableSprite):
         if self.score > 500:
             self.kill()
             return
-            
+
         posVelArray = js.rk4(self.rect.x, self.rect.y, self.strat_force_x, self.strat_force_y, self.damping, self._vel_x, self._vel_y)
-        
+
         self.rect.x = posVelArray[0]
         self.rect.y = posVelArray[1]
         self._vel_x = posVelArray[2]
         self._vel_y = posVelArray[3]
-        
+
         self.rect = self.image.get_rect(center=self.rect.center)
-        
+
         if self.rect.right > SCREEN_WIDTH:
         	self.rect.x = self.rect.x - SCREEN_WIDTH
         if self.rect.left < 0:
@@ -137,11 +140,14 @@ class Cat(MovableSprite):
         	self.rect.y = self.rect.y - SCREEN_HEIGHT
         if self.rect.bottom < 0:
         	self.rect.y = SCREEN_HEIGHT + self.rect.y
-        	
-        if pg.sprite.spritecollideany(self, self._game.cats):
-            if self.number == pg.sprite.spritecollideany(self, self._game.cats).number:
-                self.flag = False
-                return
+
+        if (
+            pg.sprite.spritecollideany(self, self._game.cats)
+            and self.number
+            == pg.sprite.spritecollideany(self, self._game.cats).number
+        ):
+            self.flag = False
+            return
     
     @property
     def vel_x(self):
@@ -160,9 +166,8 @@ class AIRat(Rat):
     def kill(self):
         super().kill()
         self.brain.fitness = self.score
-        file1 = open("./pp/Trial{}/Scores.txt".format(TRIAL_NUMBER), "a")
-        file1.write("{} \n".format(self.score))
-        file1.close()
+        with open("./pp/Trial{}/Scores.txt".format(TRIAL_NUMBER), "a") as file1:
+            file1.write("{} \n".format(self.score))
         if self.score > 499:
             file3 = open("./pp/Trial{}/Solved.txt".format(TRIAL_NUMBER), "a")
             file3.close()
